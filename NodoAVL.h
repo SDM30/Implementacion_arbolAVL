@@ -7,24 +7,24 @@ template <class T>
 class NodoAVL {
   protected:
     T dato;
-    NodoBinario<T> *hijoIzq;
-    NodoBinario<T> *hijoDer;
+    NodoAVL<T> *hijoIzq;
+    NodoAVL<T> *hijoDer;
 
   public:
-    NodoBinario(T &val);
+    NodoAVL(T &val);
     T& obtenerDato();
     void fijarDato(T &val);
-    NodoBinario<T> *obtenerHijoIzq();
-    NodoBinario<T> *obtenerHijoDer();
-    void fijarHijoIzq(NodoBinario<T> *izq);
-    void fijarHijoDer(NodoBinario<T> *der);
+    NodoAVL<T> *obtenerHijoIzq();
+    NodoAVL<T> *obtenerHijoDer();
+    void fijarHijoIzq(NodoAVL<T> *izq);
+    void fijarHijoDer(NodoAVL<T> *der);
     bool esHoja();
     int altura();
     unsigned int tamano();
     void preOrden();
     void posOrden();
     void inOrden();
-    NodoBinario<T> *obtenerMaximo();
+    NodoAVL<T> *obtenerMaximo();
 };
 
 #include "NodoAVL.hxx"

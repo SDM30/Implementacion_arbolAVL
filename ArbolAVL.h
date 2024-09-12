@@ -8,8 +8,8 @@ class ArbolAVL {
   protected:
     NodoAVL<T> *raiz;
   public:
-    ArbolBinarioOrd();
-    ~ArbolBinarioOrd();
+    ArbolAVL();
+    ~ArbolAVL();
     bool esVacio();
     T &datoRaiz();
     int altura();
