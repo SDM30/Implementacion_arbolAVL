@@ -21,6 +21,10 @@ class ArbolAVL {
     void posOrden();
     void inOrden();
     void nivelOrden();
+    void rotacionIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
+    void rotacionDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
+    void rotacionIzqDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
+    void rotacionDerIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
 };
 
 #include "ArbolAVL.hxx"

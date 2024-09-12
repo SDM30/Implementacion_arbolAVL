@@ -25,6 +25,11 @@ class NodoAVL {
     void posOrden();
     void inOrden();
     NodoAVL<T> *obtenerMaximo();
+    NodoAVL<T> *rotacionIzq();
+    NodoAVL<T> *rotacionDer();
+    void rotacionIzqDer();
+    void rotacionDerIzq();
+    bool difAlturas();
 };
 
 #include "NodoAVL.hxx"

@@ -119,3 +119,38 @@ NodoAVL<T>* NodoAVL<T>::obtenerMaximo(){
     
     return nodoActual;
 }
+
+template < class T >
+NodoAVL<T>* NodoAVL<T>::rotacionIzq(){
+    NodoAVL<T>* n2 = this->hijoDer;
+    this->hijoDer = n2->hijoIzq;
+    n2->hijoIzq = this;
+    //El arbol resuelve el cambio entre
+    //n2 y el nodo padre
+    return n2;
+}
+
+template < class T >
+NodoAVL<T>* NodoAVL<T>::rotacionDer(){
+    NodoAVL<T>* n1 = this->hijoIzq;
+    this->hijoIzq = n1->hijoDer;
+    n1->hijoDer = this;
+    //El arbol resuelve el cambio entre
+    //n2 y el nodo padre
+    return n1;
+}
+
+template < class T >
+void NodoAVL<T>::rotacionIzqDer(){
+
+}
+
+template < class T >
+void NodoAVL<T>::rotacionDerIzq(){
+
+}
+
+template < class T >
+bool NodoAVL<T>::difAlturas(){
+
+}

@@ -245,3 +245,37 @@ void ArbolAVL<T>::nivelOrden(){
         }
     }
 }
+
+template < class T >
+void ArbolAVL<T>::rotacionIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
+    //realizar rotacion hacia la izquierda del hijo
+    NodoAVL<T>* nodoTemp = nodoHijo->rotacionIzq();
+    //revisar de que lado es el hijo
+    if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        nodoPadre->fijarHijoDer(nodoTemp);
+    } else {
+        nodoPadre->fijarHijoIzq(nodoTemp);
+    }
+}
+
+template < class T >
+void ArbolAVL<T>::rotacionDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
+    //realizar rotacion hacia la izquierda del hijo
+    NodoAVL<T>* nodoTemp = nodoHijo->rotacionDer();
+    //revisar de que lado es el hijo
+    if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        nodoPadre->fijarHijoDer(nodoTemp);
+    } else {
+        nodoPadre->fijarHijoIzq(nodoTemp);
+    }
+}
+
+template < class T >
+void ArbolAVL<T>::rotacionIzqDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
+
+}
+
+template < class T >
+void ArbolAVL<T>::rotacionDerIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
+
+}
