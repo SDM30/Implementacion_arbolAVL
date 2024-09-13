@@ -132,6 +132,7 @@ NodoAVL<T>* NodoAVL<T>::rotacionIzq(){
 
 template < class T >
 NodoAVL<T>* NodoAVL<T>::rotacionDer(){
+    std::cout<<"NODO ACTUAL"<<this->obtenerDato()<<std::endl;
     NodoAVL<T>* n1 = this->hijoIzq;
     this->hijoIzq = n1->hijoDer;
     n1->hijoDer = this;

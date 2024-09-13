@@ -27,11 +27,15 @@ T& ArbolAVL<T>::datoRaiz(){
 //Recursiva
 template < class T >
 int ArbolAVL<T>::altura(){
+
     if (this->esVacio()){
         return -1;
+    } else if ((this->raiz)->esHoja()){
+        return 0;
     } else {  
-        return (this->raiz)->altura();
+        return (this->raiz)->altura() + 1;
     }
+
 }
 
 //Recursiva
@@ -171,19 +175,11 @@ bool ArbolAVL<T>::eliminar(T &val){
         }  
         //3. Nodo con dos hijos
         else if (nodo->obtenerHijoIzq() != NULL && nodo->obtenerHijoDer() != NULL){
-            //Usar maximo de sub arbol izq para remplazar nodo
+            // Usar el máximo del subárbol izquierdo para reemplazar el nodo
             NodoAVL<T>* nodoMaxIzq = (nodo->obtenerHijoIzq())->obtenerMaximo();
-            if (padre == NULL) {
-                this->raiz = nodoMaxIzq;
-            } else {
-                if (nodoMaxIzq == padre->obtenerHijoDer()){
-                    padre->fijarHijoDer(nodoMaxIzq);
-                } else {
-                    padre->fijarHijoIzq(nodoMaxIzq);
-                }
-            }
-
-            eliminado = true;
+            T valorMaximo = nodoMaxIzq->obtenerDato(); // Almacenar el valor del máximo
+            eliminar(valorMaximo);  // Eliminar el nodo máximo
+            nodo->fijarDato(valorMaximo);  // Reemplazar el valor del nodo a eliminar con el valor del máximo
         }
     }
 
