@@ -141,16 +141,30 @@ NodoAVL<T>* NodoAVL<T>::rotacionDer(){
 }
 
 template < class T >
-void NodoAVL<T>::rotacionIzqDer(){
-
+NodoAVL<T>* NodoAVL<T>::rotacionIzqDer(){
+    NodoAVL<T>* aux = (this->hijoIzq)->rotacionIzq();
+    this->hijoIzq = aux;
+    return this->rotacionDer();
 }
 
 template < class T >
-void NodoAVL<T>::rotacionDerIzq(){
-
+NodoAVL<T>* NodoAVL<T>::rotacionDerIzq(){
+    NodoAVL<T>* aux = (this->hijoDer)->rotacionDer();
+    this->hijoDer = aux;
+    return this->rotacionIzq();
 }
 
 template < class T >
-bool NodoAVL<T>::difAlturas(){
+int NodoAVL<T>::difAlturas(){
+    int alturaDer = -1, alturaIzq = -1;
 
+    if (this->hijoIzq != NULL) {
+        alturaIzq = (this->hijoIzq)->altura();
+    }
+
+    if (this->hijoDer != NULL) {
+        alturaDer = (this->hijoDer)->altura();
+    }
+
+    return alturaIzq - alturaDer;
 }

@@ -1,6 +1,7 @@
 #include "ArbolAVL.h"
 #include <queue>
 
+
 template < class T >
 ArbolAVL<T>::ArbolAVL(){
     this->raiz = NULL;
@@ -50,18 +51,21 @@ unsigned int ArbolAVL<T>::tamano(){
 //Recurrente o Iterativa
 template < class T >
 bool ArbolAVL<T>::insertar(T &val){
-    NodoAVL<T>* padre = this->raiz;
+    NodoAVL<T>* padre = NULL;
     NodoAVL<T>* nodo = this->raiz;
     bool insertado = false;
     bool duplicado = false;
     bool arbolVacio = false;
+    //Nodos por los que se han pasado para insrt
+    std::stack<NodoAVL<T>*> camino;
 
     if (this->esVacio()) {
-        this->raiz = new NodoBinario<T>(val);
+        this->raiz = new NodoAVL<T>(val);
         arbolVacio = true;
     }
 
     while (nodo != NULL){
+        camino.push(nodo);
         padre = nodo;
         if (val < nodo->obtenerDato()) {
             nodo = nodo->obtenerHijoIzq();
@@ -74,7 +78,7 @@ bool ArbolAVL<T>::insertar(T &val){
     }
 
     if (!duplicado && !arbolVacio) {
-        NodoAVL<T>* nodoIns = new NodoBinario<T>(val);
+        NodoAVL<T>* nodoIns = new NodoAVL<T>(val);
         //Verificar si hay algun fallo en la asignacion de mem
         if (nodoIns != NULL) {
             if (nodoIns->obtenerDato() > padre->obtenerDato()){
@@ -83,8 +87,12 @@ bool ArbolAVL<T>::insertar(T &val){
                 padre->fijarHijoIzq(nodoIns);
             }
         }
+
         insertado = true;
     }
+
+    if (insertado)
+        balancearArbol(camino);
 
     return insertado;
 }
@@ -92,14 +100,16 @@ bool ArbolAVL<T>::insertar(T &val){
 //Recurrente o Iterativa
 template < class T >
 bool ArbolAVL<T>::eliminar(T &val){
-
-    NodoAVL<T>* padre = this->raiz;
+    NodoAVL<T>* padre = NULL;
     NodoAVL<T>* nodo = this->raiz;
     bool encontrado = false;
     bool eliminado = false;
+    //Nodos por los que se han pasado para elim
+    std::stack<NodoAVL<T>*> camino;
     //Comparar con dato en nodo para bajar por izq o der
     //y para saber si val esta en el arbol
-    while (nodo != NULL && !encontrado){
+    while (nodo != NULL && !encontrado) {
+        camino.push(nodo);
         if (val < nodo->obtenerDato()) {
             padre = nodo;
             nodo = nodo->obtenerHijoIzq();
@@ -163,17 +173,21 @@ bool ArbolAVL<T>::eliminar(T &val){
         else if (nodo->obtenerHijoIzq() != NULL && nodo->obtenerHijoDer() != NULL){
             //Usar maximo de sub arbol izq para remplazar nodo
             NodoAVL<T>* nodoMaxIzq = (nodo->obtenerHijoIzq())->obtenerMaximo();
-
-            if (nodoMaxIzq == padre->obtenerHijoDer()){
-                padre->fijarHijoDer(nodoMaxIzq);
+            if (padre == NULL) {
+                this->raiz = nodoMaxIzq;
             } else {
-                padre->fijarHijoIzq(nodoMaxIzq);
+                if (nodoMaxIzq == padre->obtenerHijoDer()){
+                    padre->fijarHijoDer(nodoMaxIzq);
+                } else {
+                    padre->fijarHijoIzq(nodoMaxIzq);
+                }
             }
 
-            delete nodoMaxIzq;
             eliminado = true;
         }
     }
+
+    balancearArbol(camino);
 
     if (eliminado)
         delete nodo;
@@ -250,8 +264,11 @@ template < class T >
 void ArbolAVL<T>::rotacionIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
     //realizar rotacion hacia la izquierda del hijo
     NodoAVL<T>* nodoTemp = nodoHijo->rotacionIzq();
-    //revisar de que lado es el hijo
-    if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+    if (nodoPadre == NULL) {
+        // Si no hay padre, es la raíz
+        this->raiz = nodoTemp;
+    } else if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        //revisar de que lado es el hijo
         nodoPadre->fijarHijoDer(nodoTemp);
     } else {
         nodoPadre->fijarHijoIzq(nodoTemp);
@@ -262,8 +279,12 @@ template < class T >
 void ArbolAVL<T>::rotacionDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
     //realizar rotacion hacia la izquierda del hijo
     NodoAVL<T>* nodoTemp = nodoHijo->rotacionDer();
-    //revisar de que lado es el hijo
-    if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+    
+    if (nodoPadre == NULL) {
+        // Si no hay padre, es la raíz
+        this->raiz = nodoTemp;
+    } else if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        //revisar de que lado es el hijo
         nodoPadre->fijarHijoDer(nodoTemp);
     } else {
         nodoPadre->fijarHijoIzq(nodoTemp);
@@ -272,10 +293,76 @@ void ArbolAVL<T>::rotacionDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
 
 template < class T >
 void ArbolAVL<T>::rotacionIzqDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
-
+    //realizar rotacion izquierda - derecha
+    NodoAVL<T>* nodoTemp = nodoHijo->rotacionIzqDer();
+    //revisar de que lado es el hijo
+    if (nodoPadre == NULL) {
+        // Si no hay padre, es la raíz
+        this->raiz = nodoTemp;
+    } else if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        //revisar de que lado es el hijo
+        nodoPadre->fijarHijoDer(nodoTemp);
+    } else {
+        nodoPadre->fijarHijoIzq(nodoTemp);
+    }
 }
 
 template < class T >
 void ArbolAVL<T>::rotacionDerIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo){
+    //realizar rotacion derecha - izquierda
+    NodoAVL<T>* nodoTemp = nodoHijo->rotacionDerIzq();
+    if (nodoPadre == NULL) {
+        // Si no hay padre, es la raíz
+        this->raiz = nodoTemp;
+    } else if (nodoPadre->obtenerHijoDer() == nodoHijo) {
+        //revisar de que lado es el hijo
+        nodoPadre->fijarHijoDer(nodoTemp);
+    } else {
+        nodoPadre->fijarHijoIzq(nodoTemp);
+    }
+}
 
+template <class T>
+bool ArbolAVL<T>::balanceo(NodoAVL<T> *nodoPadre) {
+    int dif = nodoPadre->difAlturas();
+    
+    // Si el subárbol está desbalanceado (|dif| > 1)
+    if (dif == 2) {
+        NodoAVL<T>* n1 = nodoPadre->obtenerHijoIzq();
+        // Subárbol izquierdo más alto (rotaciones hacia la derecha)
+        if (n1->difAlturas() < 0) {
+            // Caso de rotación Izquierda-Derecha
+            this->rotacionIzqDer(nodoPadre, n1);
+        } else {
+            // Caso de rotación Derecha
+            this->rotacionDer(nodoPadre, n1);
+        }
+        return true;
+    } else if (dif == -2) {
+        NodoAVL<T>* n2 = nodoPadre->obtenerHijoDer();
+        // Subárbol derecho más alto (rotaciones hacia la izquierda)
+        if (n2->difAlturas() > 0) {
+            // Caso de rotación Derecha-Izquierda
+            this->rotacionDerIzq(nodoPadre, n2);
+        } else {
+            // Caso de rotación Izquierda
+            this->rotacionIzq(nodoPadre, n2);
+        }
+        return true;
+    }
+    return false;
+}
+
+template <class T>
+void ArbolAVL<T>::balancearArbol(std::stack<NodoAVL<T>*> &camino) {
+    //Balancear Arbol
+    while (!camino.empty()) {
+        NodoAVL<T>* nodoActual = camino.top();
+        camino.pop();
+
+        // Recalcular alturas y verificar balanceo
+        if (this->balanceo(nodoActual)) {
+            break; //Balanceado
+        }
+    }
 }

@@ -27,9 +27,9 @@ class NodoAVL {
     NodoAVL<T> *obtenerMaximo();
     NodoAVL<T> *rotacionIzq();
     NodoAVL<T> *rotacionDer();
-    void rotacionIzqDer();
-    void rotacionDerIzq();
-    bool difAlturas();
+    NodoAVL<T>* rotacionIzqDer();
+    NodoAVL<T>* rotacionDerIzq();
+    int difAlturas();
 };
 
 #include "NodoAVL.hxx"
