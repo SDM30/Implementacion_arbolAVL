@@ -16,7 +16,9 @@ class ArbolAVL {
     int altura();
     unsigned int tamano();
     bool insertar(T &val);
+    NodoAVL<T>* insertar(NodoAVL<T>* nodo,T& val, bool& insertado);
     bool eliminar(T &val);
+    NodoAVL<T>* eliminar(NodoAVL<T>* nodo, T& val, bool& eliminado);
     bool buscar(T &val);
     void preOrden();
     void posOrden();
@@ -26,8 +28,7 @@ class ArbolAVL {
     void rotacionDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
     void rotacionIzqDer(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
     void rotacionDerIzq(NodoAVL<T> *nodoPadre, NodoAVL<T> *nodoHijo);
-    bool balanceo(NodoAVL<T> *nodoPadre);
-    void balancearArbol(std::stack<NodoAVL<T>*> &camino);
+    NodoAVL<T>* balancear(NodoAVL<T> *nodo);
 };
 
 #include "ArbolAVL.hxx"
